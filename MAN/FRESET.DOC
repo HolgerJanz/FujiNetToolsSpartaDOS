@@ -1,0 +1,6 @@
+
+  FRESET
+
+Resets FujiNet executing a warm start.
+The commands waits for 3s to give
+FujiNet time to reinitialize.

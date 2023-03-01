@@ -1,0 +1,7 @@
+
+  FCD slot [path]
+
+Sets working directory for host slot
+to path. If path does not start with 
+character / then the current path
+will be extended.

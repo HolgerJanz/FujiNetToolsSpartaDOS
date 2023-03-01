@@ -1,0 +1,10 @@
+
+  FPWD slot
+
+Prints the current working directory
+of a host slot.
+
+The host slot is specified by numbers
+from 1 to 8.
+
+See also FCD.

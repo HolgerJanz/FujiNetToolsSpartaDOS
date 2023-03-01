@@ -1,0 +1,7 @@
+
+  FNET ssid [passwd]
+
+Sets the Wifi connection used by
+FujiNet. Parentheses " can be used to
+specify ssid or passwd containing
+spaces.

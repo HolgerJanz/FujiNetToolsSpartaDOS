@@ -1,0 +1,14 @@
+
+  FLD
+
+Lists configuration of all device slots.
+
+One line is listed for every device
+slot in the following format:
+
+  Dx:slot(R|W)file
+  
+Dx:  : device slot number D1:-D8:
+slot : used host slot number 1-8
+R|W  : in read or write mode
+file : used path and file name

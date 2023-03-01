@@ -1,0 +1,9 @@
+
+  FSCAN
+
+Lets FujiNet scan for WiFi networks.
+
+For every found WiFi network the
+signal quality in dBm and in scale
+from one (low) to six (high) stars
+and the SSID is printed.

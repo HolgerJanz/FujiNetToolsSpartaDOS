@@ -1,0 +1,12 @@
+
+  FLH
+
+List configuration of all host slots.
+
+One line is listed for every host
+slot in the following format:
+
+  slot:address
+  
+slot   : host slot number 1-8
+address: used TNFS address

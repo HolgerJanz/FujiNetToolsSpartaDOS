@@ -1,0 +1,14 @@
+
+  FLS slot [path[/pattern]]
+
+Lists the content of a directory
+mounted to a host slot.
+
+The host slot is specified by numbers
+from 1 to 8.
+
+Depending on the TNFS server path and
+pattern can be case sensitive. Access
+to the SD cart of FujiNet is not case
+sensitive. Wildcards * and ? are
+supported.
