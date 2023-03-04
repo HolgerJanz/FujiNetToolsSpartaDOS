@@ -1,8 +1,9 @@
 
   FMOUNT D#: [slot R|W file]
 
-Mounts an ATR image, CAS, or executable
-file to the device slot D#:.
+Mounts or unmounts an ATR image, CAS,
+or executable file to the device slot
+D#:.
 
 The host slot is specified by numbers
 from 1 to 8.
@@ -13,3 +14,7 @@ in read (R) or write mode (W).
 The current working directory of the
 host slot is used to find the file
 (see FCD).
+
+A device slot is umounted if no file
+and no options are specified e.g.,
+  FMOUNT D#:

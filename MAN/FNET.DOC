@@ -5,3 +5,7 @@ Sets the Wifi connection used by
 FujiNet. Parentheses " can be used to
 specify ssid or passwd containing
 spaces.
+
+The empty siid "" can be used to
+switch off WiFi e.g.,
+  FNET ""
