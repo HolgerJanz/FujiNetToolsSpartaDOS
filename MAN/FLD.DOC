@@ -6,7 +6,7 @@ Lists configuration of all device slots.
 One line is listed for every device
 slot in the following format:
 
-  Dx:slot(R|W)file
+  Dx:(slotR|W)file
   
 Dx:  : device slot number D1:-D8:
 slot : used host slot number 1-8

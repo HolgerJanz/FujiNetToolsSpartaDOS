@@ -10,7 +10,11 @@ _fail       tya
             jsr _putdec
             lda #$9B
             jsr _putc
-* stop batch
+* check it is not SDX
+            lda SD_SVERS
+            cmp #$40
+            bcs _dosvec
+* stop batch for SpartaDOS 3
             ldy #SD_XDIVIO
             lda (DOSVEC),Y
             sta _fxdivio+1
@@ -19,7 +23,8 @@ _fail       tya
             sta _fxdivio+2
             ldy #$01
 _fxdivio    jsr COLDSV
-            jmp (DOSVEC)
+* back home
+_dosvec     jmp (DOSVEC)
 
 _putdec     ldx #$00
             stx _chkprez

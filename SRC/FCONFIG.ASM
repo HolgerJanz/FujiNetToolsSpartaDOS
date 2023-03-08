@@ -4,6 +4,7 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 * read config via SIO
         ldx <siocfg
@@ -61,7 +62,7 @@
         jsr prnmac
 
         jsr _print
-        dta c'FCONFIG Version: 1.1 19-01-2023',b($9b,$00)
+        dta c'FCONFIG Version: 1.1 06-03-2023',b($9b,$00)
 
         jsr _print
         dta c'  Fuji Firmware: ',b($00)

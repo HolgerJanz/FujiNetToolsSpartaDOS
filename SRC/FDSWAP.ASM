@@ -1,6 +1,6 @@
 * FujiNet FDSWAP Swap Drives
 * 2023-02-01, ep
-* 2023-02-20, hj
+* 2023-03-06, hj
 * based on a lot of works by Holger Janz
 * v0004
 
@@ -12,6 +12,7 @@ srcptr  equ $D4              ; FR0.0
 dstptr  equ $D6              ; FR0.2
 
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 
 * parse comand line
@@ -444,19 +445,12 @@ siohmnt dta b($70,$01)  ; FujiNet device and unit
 hmntslt dta b($00)      ; AUX1
         dta b($00)      ; AUX2
 
-
-        icl '_PRINT.ICL'
-        icl '_CHKSDOS.ICL'
-        icl '_SDFAIL.ICL'
-        icl '_SDLSIO.ICL'
-        icl '_SDLBUF.ICL'
-
 prnman  jsr _print
         dta b($9b),c'Swaps any two drives on FujiNet',b($9b)
         dta c'Checks for other existing drives',b($9b,$00)
 
 prnhlp  jsr _print
-        dta b($9b),c'Version 2023-02-20 (ep)',b($9b)
+        dta b($9b),c'Version 2023-03-06 (ep)',b($9b)
         dta c'Usage: FDSWAP Dx: Dy:',b($9b,$00)
         rts
 
@@ -491,6 +485,12 @@ extsrc  jsr _print
 extdst  jsr _print
         dta c'external destination drive online',b($9B,$00)
         rts
+
+        icl '_PRINT.ICL'
+        icl '_CHKSDOS.ICL'
+        icl '_SDFAIL.ICL'
+        icl '_SDLSIO.ICL'
+        icl '_SDLBUF.ICL'
 
 * Laufwerks-ID, Laufwerksnummer, hslot#, R/W, SIO-Status
 srcdrvid  equ *

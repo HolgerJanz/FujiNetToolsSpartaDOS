@@ -5,6 +5,7 @@
 
 * main
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 * scan for WiFis
         ldx <sioscan
@@ -31,7 +32,7 @@ putdec  jsr _putdec
         jsr _print
         dta c'dBm ',b($00)
 * print scale
-        ldx $00
+        ldx #$00
         stx dbmi
 nxtscl  pla
         cmp dbms,X
@@ -67,12 +68,6 @@ prneol  lda #$9b
         bcc nxtsres
         rts
 
-        icl '_PRINT.ICL'
-        icl '_CHKSDOS.ICL'
-        icl '_SDLBUF.ICL'
-        icl '_SDFAIL.ICL'
-        icl '_SDLSIO.ICL'
-
 * DCB data for Fuji SCAN
 sioscan dta b($70,$01)  ; FujiNet device and unit
         dta b($FD)      ; Command SCAN
@@ -98,6 +93,12 @@ scannum dta b($00)      ; scan entry index
 dbmi    dta b($00)
 dbms    dta b(90,80,70,60,50,40)
 
+        icl '_PRINT.ICL'
+        icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
+        icl '_SDFAIL.ICL'
+        icl '_SDLSIO.ICL'
+
 * iterator
 iter    equ *
 * number of scanned WiFis (4 Bytes)
@@ -107,4 +108,3 @@ scannam equ wifinum+4
 scandbm equ scannam+33
 
         end
-

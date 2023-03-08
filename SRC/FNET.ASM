@@ -5,6 +5,7 @@
 
 * main
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear SSID/passwd buffer
         ldx #fn_ssid_ln+fn_pass_ln-1
@@ -60,8 +61,7 @@ badpara jsr prnhlp
         ldy #$9C ; Bad Parameter
         jmp _fail
 prnhlp  jsr _print
-        dta b($9b),c'Vers 20-01-2023',b($9b)
-        dta c'Usage: FNET ssid [passwd]',b($9b,$00)
+        dta b($9b),c'Usage: FNET ssid [passwd]',b($9b,$00)
         rts
 
 * call sio
@@ -96,12 +96,6 @@ wifiok  jsr _print
         dta c'ok',b($9b,$00)
         rts
 
-        icl '_PRINT.ICL'
-        icl '_CHKSDOS.ICL'
-        icl '_SDLBUF.ICL'
-        icl '_SDFAIL.ICL'
-        icl '_SDLSIO.ICL'
-
 * DCB data for Fuji SET SSID AND CONNECT
 siossid dta b($70,$01)  ; FujiNet device and unit
         dta b($FB)      ; Command SET SSID AND CONNECT
@@ -122,6 +116,12 @@ siostat dta b($70,$01)  ; FujiNet device and unit
         dta a(1)        ; buffer length
         dta b($00)      ; AUX1
         dta b($00)      ; AUX2
+
+        icl '_PRINT.ICL'
+        icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
+        icl '_SDFAIL.ICL'
+        icl '_SDLSIO.ICL'
 
 wfstat  equ *
 * SSID 33 Bytes

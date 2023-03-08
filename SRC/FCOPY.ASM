@@ -5,6 +5,7 @@
 
 * main
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear copy buffer
         ldx #$00
@@ -74,8 +75,7 @@ badpara jsr prnhlp
         ldy #$9C ; Bad Parameter
         jmp _fail
 prnhlp  jsr _print
-        dta b($9b),c'Vers 21-01-2023',b($9b)
-        dta c'Usage: FCOPY sslot# sfile dslot# dfile',b($9b,$00)
+        dta b($9b),c'Usage: FCOPY sslot sfile dslot dfile',b($9b,$00)
         rts
 
 * call sio
@@ -85,12 +85,6 @@ callsio jsr _print
         ldy >siocopy
         jsr _dosio
         rts
-
-        icl '_PRINT.ICL'
-        icl '_CHKSDOS.ICL'
-        icl '_SDLBUF.ICL'
-        icl '_SDFAIL.ICL'
-        icl '_SDLSIO.ICL'
 
 * DCB data for Fuji COPY FILE
 siocopy dta b($70,$01)  ; FujiNet device and unit
@@ -102,6 +96,12 @@ siocopy dta b($70,$01)  ; FujiNet device and unit
         dta a($100)     ; buffer size
 srchst  dta b($00)      ; AUX1 source host slot 1-8
 dsthst  dta b($00)      ; AUX2 dest host solt 1-8
+
+        icl '_PRINT.ICL'
+        icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
+        icl '_SDFAIL.ICL'
+        icl '_SDLSIO.ICL'
 
 cpybuf  equ *
 

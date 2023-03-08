@@ -4,6 +4,7 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 *  parse parameter
         jsr _lbinit
@@ -36,6 +37,7 @@
         asl @
         asl @
         tay
+        sty sltoff+1
         clc
         adc #fn_hslt_ln-1
         sta cmp_y+1
@@ -58,8 +60,7 @@ badpara jsr prnhlp
         ldy #$9C ; Bad Parameter
         jmp _fail
 prnhlp  jsr _print
-        dta b($9b),c'Vers 19-01-2023',b($9b)
-        dta c'Usage: FHOST slot# address',b($9b,$00)
+        dta b($9b),c'Usage: FHOST slot [address]',b($9b,$00)
         rts
 
 * get number ATASCII 1..8 => HEX 0..7
@@ -76,27 +77,42 @@ padslt  lda #$00
         tya
         and #%00011111
         bne padslt
+
+* check mount or unmount
+sltoff  ldy #$00
+        lda hslts,Y
+        bne mountsl
+* unmount
+* SIO $E6 does not work
+* instead just write empty host
+*        jsr _print
+*        dta c'un',b($00)
+*        lda #$E6
+*        sta mntcmd
+*        jsr mntslt
+        jsr wrthslt
+        rts
+* mount
+mountsl jsr wrthslt
+        jsr mntslt
+        rts
+
 * write host slots
-        jsr _print
+wrthslt jsr _print
         dta c'write host slots',b($9b,$00)
         ldx <siowslt
         ldy >siowslt
         jsr _dosio
-* mount host slot
-        jsr _print
+        rts
+
+mntslt  jsr _print
         dta c'mount host slot',b($9b,$00)
         ldx <siohmnt
         ldy >siohmnt
         jsr _dosio
         rts
 
-        icl '_PRINT.ICL'
-        icl '_CHKSDOS.ICL'
-        icl '_SDLBUF.ICL'
-        icl '_SDFAIL.ICL'
-        icl '_SDLSIO.ICL'
-
-* DCB data for Fuji READ HIST SLOTS
+* DCB data for Fuji READ HOST SLOTS
 siorslt dta b($70,$01)  ; FujiNet device and unit
         dta b($F4)      ; Command READ HOST SLOTS
         dta b($40)      ; status
@@ -106,7 +122,7 @@ siorslt dta b($70,$01)  ; FujiNet device and unit
         dta a(fn_hslt_l8) ; buffer size
         dta b($00)      ; AUX1
         dta b($00)      ; AUX2
-* DCB data for Fuji WRITE HIST SLOTS
+* DCB data for Fuji WRITE HOST SLOTS
 siowslt dta b($70,$01)  ; FujiNet device and unit
         dta b($F3)      ; Command READ HOST SLOTS
         dta b($80)      ; status
@@ -116,9 +132,9 @@ siowslt dta b($70,$01)  ; FujiNet device and unit
         dta a(fn_hslt_l8)  ; buffer size
         dta b($00)      ; AUX1
         dta b($00)      ; AUX2
-* DCB data for Fuji MOUNT HOST SLOT
+* DCB data for Fuji (UN)MOUNT HOST SLOT
 siohmnt dta b($70,$01)  ; FujiNet device and unit
-        dta b($F9)      ; Command MOUNT HOST SLOT
+mntcmd  dta b($F9)      ; Command MOUNT HOST SLOT
         dta b($00)      ; status
         dta a($0000)    ; device slots buffer
         dta b($10)      ; time out
@@ -126,6 +142,12 @@ siohmnt dta b($70,$01)  ; FujiNet device and unit
         dta a($0000)    ; 8 device slots
 hmntslt dta b($00)      ; AUX1
         dta b($00)      ; AUX2
+
+        icl '_PRINT.ICL'
+        icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
+        icl '_SDFAIL.ICL'
+        icl '_SDLSIO.ICL'
 
 * buffer for HOST SLOTS ($100 aligned)
 hslts   equ *&$FF00+$100

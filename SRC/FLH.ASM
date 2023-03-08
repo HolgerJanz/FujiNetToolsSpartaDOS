@@ -4,6 +4,7 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 * read host slots
         ldx <siodata

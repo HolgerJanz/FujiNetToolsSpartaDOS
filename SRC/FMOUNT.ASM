@@ -5,6 +5,7 @@
 
 * main
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear device slot to be set
         ldx #fn_devs_ln-1
@@ -74,8 +75,7 @@ badpara jsr prnhlp
         ldy #$9C ; Bad Parameter
         jmp _fail
 prnhlp  jsr _print
-        dta b($9b),c'Vers 19-01-2023',b($9b)
-        dta c'Usage: FMOUNT D#: [slot# R|W file]',b($9b,$00)
+        dta b($9b),c'Usage: FMOUNT Dx: [slot R|W file]',b($9b,$00)
         rts
 
 * mount disk slot
@@ -200,12 +200,6 @@ getnum  and #$0F
         sbc #$01
         rts
 
-        icl '_PRINT.ICL'
-        icl '_CHKSDOS.ICL'
-        icl '_SDLBUF.ICL'
-        icl '_SDFAIL.ICL'
-        icl '_SDLSIO.ICL'
-
 * DCB data for FujiNet
 * read device slots
 siordev dta b($70,$01)  ; FujiNet device and unit
@@ -272,6 +266,12 @@ siodmnt dta b($70,$01)  ; FujiNet device and unit
         dta a($0000)    ; unused
 dmntslt dta b($00)      ; disk solt
 dmntmod dta b($00)      ; mode
+
+        icl '_PRINT.ICL'
+        icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
+        icl '_SDFAIL.ICL'
+        icl '_SDLSIO.ICL'
 
 * device slots buffer
 devslts equ *

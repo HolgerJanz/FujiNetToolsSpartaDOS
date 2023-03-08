@@ -1,8 +1,11 @@
 
-  FHOST slot address
+  FHOST slot [address]
 
 Sets and mounts a host slot to a TNFS
 address.
 
 Host slots are specified by numbers
 from 1 to 8.
+
+If no address is provided then the
+host slot is unmounted.

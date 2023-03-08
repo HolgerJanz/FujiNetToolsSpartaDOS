@@ -4,6 +4,7 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
+        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear buffer
         ldx #$00
@@ -30,8 +31,7 @@ badpara jsr prnuse
         ldy #$9C
         jmp _fail
 prnuse  jsr _print
-        dta b($9b),c'Vers 24-01-2023',b($9b)
-        dta c'Usage: FPWD slot#',b($9b,$00)
+        dta b($9b),c'Usage: FPWD slot',b($9b,$00)
         rts
 
 * set slot
