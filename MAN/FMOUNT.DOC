@@ -18,3 +18,7 @@ host slot is used to find the file
 A device slot is umounted if no file
 and no options are specified e.g.,
   FMOUNT D#:
+
+As with firmware version 0.5.daf2015f
+2023-01-25 an unmounted drive will
+not get offline.

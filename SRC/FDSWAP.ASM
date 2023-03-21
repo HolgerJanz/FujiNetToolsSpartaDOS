@@ -12,26 +12,12 @@ srcptr  equ $D4              ; FR0.0
 dstptr  equ $D6              ; FR0.2
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
 
 * parse comand line
         jsr _lbinit
         jsr _lbtrim
-
-        cmp #$9b             ; no parameters
-        bne p1
-        jmp prnhlp
-
-p1      cmp #'/'
-        bne p2
-        jsr _lbget
-        cmp #'?'
-        beq *+5
-        jmp parerr
-        jmp prnman
-
-p2      and #$DF
+        and #$DF
         cmp #'D'
         beq *+5
         jmp parerr
@@ -445,13 +431,13 @@ siohmnt dta b($70,$01)  ; FujiNet device and unit
 hmntslt dta b($00)      ; AUX1
         dta b($00)      ; AUX2
 
-prnman  jsr _print
-        dta b($9b),c'Swaps any two drives on FujiNet',b($9b)
-        dta c'Checks for other existing drives',b($9b,$00)
-
-prnhlp  jsr _print
-        dta b($9b),c'Version 2023-03-06 (ep)',b($9b)
-        dta c'Usage: FDSWAP Dx: Dy:',b($9b,$00)
+prnDocu jsr _print
+        dta b($9b)
+        dta c'Usage: FDSWAP Dx: Dy:',b($9b)
+        icl '_VERSION.ICL'
+        dta c'Swaps any two device slots on FujiNet.',b($9b)
+        dta c'Checks for other existing drives.',b($9b)
+        dta b($00)
         rts
 
 parerr  jsr _print

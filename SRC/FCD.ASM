@@ -3,7 +3,6 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear buffer
         ldx #$00
@@ -15,7 +14,7 @@ clr_buf sta buffer,X
         jsr _lbinit
         jsr _lbtrim
         cmp #$9b
-        beq prnuse
+        beq badpara
 * check for slot number
         cmp #'1'
         bcc badpara
@@ -42,11 +41,16 @@ chkpth  dex
         jmp spth
 
 * bad parameter print usage
-badpara jsr prnuse
-        ldy #$9C ; Bad Parameter
+badpara ldy #$9C ; Bad Parameter
         jmp _fail
-prnuse  jsr _print
-        dta b($9b),c'Usage: FCD slot [path]',b($9b,$00)
+
+* print docu, used by _blinit
+prnDocu jsr _print
+        dta b($9b)
+        dta c'Usage: FCD slot [path]',b($9b)
+        icl '_VERSION.ICL'
+        dta c'Sets prefix of host slot to path.',b($9b)
+        dta b($00)
         rts
 
 * set path in buffer for CD

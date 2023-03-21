@@ -1,12 +1,16 @@
 
-  FCOPY sslot sfile dslot dfile
+  FCOPY sslot sfile dslot [dfile]
 
 Copies the source file sfile from host
 slot sslot to destination file dfile
-in host slot dslot.
+in host slot dslot. Prefix of both
+host slots are used (see FCD).
 
 Host slots are specified by numbers
 from 1 to 8.
+
+If no destination file is provided
+then the source file name is used.
 
 Only single files can be copied. There
 is no support for wildcards.

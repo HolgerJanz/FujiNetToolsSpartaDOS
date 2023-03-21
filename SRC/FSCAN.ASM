@@ -5,8 +5,8 @@
 
 * main
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
+        jsr _lbinit
 * scan for WiFis
         ldx <sioscan
         ldy >sioscan
@@ -66,6 +66,12 @@ prneol  lda #$9b
         lda scannum
         cmp wifinum
         bcc nxtsres
+        rts
+
+prnDocu jsr _print
+        dta b($9b),c'Usage: FSCAN',b($9b)
+        icl '_VERSION.ICL'
+        dta c'Scans for networks and list result.',b($9b,$00)
         rts
 
 * DCB data for Fuji SCAN

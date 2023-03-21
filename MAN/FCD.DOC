@@ -1,7 +1,15 @@
 
   FCD slot [path]
 
-Sets working directory for host slot
-to path. If path does not start with 
-character / then the current path
-will be extended.
+Sets prefix of host slot to path.
+
+If no path is provided then the
+current prefix will be deleted.
+
+If path does not start with character
+/ then the current path will be
+extended.
+
+NOTE: The prefixes of host slots are
+not saved by FujiNet. After power on
+all prefixes are always empty.

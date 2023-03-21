@@ -1,0 +1,364 @@
+mads 2.0.9
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/FPWD.ASM
+     1 				* FujiNet FPWD Print Slot Path
+     2
+     3 				        icl '_SYSEQU.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_SYSEQU.ICL
+     1 = 0000			ICHID       equ $00
+     2 = 0001			ICDNO       equ $01
+     3 = 0002			ICCOM       equ $02
+     4 = 0003			ICSTA       equ $03
+     5 = 0004			ICBAL       equ $04
+     6 = 0005			ICBAH       equ $05
+     7 = 0006			ICPTL       equ $06
+     8 = 0007			ICPTH       equ $07
+     9 = 0008			ICBLL       equ $08
+    10 = 0009			ICBLH       equ $09
+    11 = 000A			ICAX1       equ $0A
+    12 = 000B			ICAX2       equ $0B
+    13 = 000C			ICAX3       equ $0C
+    14 = 000D			ICAX4       equ $0D
+    15 = 000E			ICAX5       equ $0E
+    16 = 000F			ICAX6       equ $0F
+    17
+    18 = 000A			DOSVEC      equ $0A
+    19 = 000C			DOSINI      equ $0C
+    20 = 0012			RTCLOK      equ $12
+    21 = 0042			CRITIC      equ $42
+    22 = 006A			RAMTOP      equ $6a
+    23
+    24 = 02E4			RAMSIZ      equ $2e4
+    25 = 02E5			MEMTOP      equ $2e5
+    26 = 02E7			MEMLO       equ $2e7
+    27 = 022F			SDMCTL      equ $22F
+    28 = 02FC			CH          equ $2fc
+    29
+    30 = 0300			DDEVIC      equ $300
+    31 = 0301			DUNIT       equ $301
+    32 = 0302			DCMND       equ $302
+    33 = 0303			DSTATS      equ $303
+    34 = 0304			DBUFA       equ $304
+    35 = 0306			DTIMLO      equ $306
+    36 = 0307			DUNUSE      equ $307
+    37 = 0308			DBYT        equ $308
+    38 = 030A			DAUX1       equ $30A
+    39 = 030B			DAUX2       equ $30B
+    40
+    41 = 0340			IOCB0       equ $340
+    42
+    43 				* dynamic SpartaDOS variables (relative to DOSVEC)
+    44 = 0700			SD_SPARTA   equ $700 ; SpartaDOS flag 'S'
+    45 = 0701			SD_SVERS    equ $701 ; SparataDOS version
+    46 = 0702			SD_SSVERS   equ $702 ; SparataDOS sub version
+    47 				* substract
+    48 = 000A			SD_LSIO     equ $0A
+    49 				* add
+    50 = 0003			SD_CRNAME   equ $03
+    51 = 0008			SD_XDIVIO   equ $08
+    52 = 000A			SD_BUFOFF   equ $0a
+    53 = 0013			SD_ODATER   equ $13
+    54 = 0016			SD_OTIMER   equ $16
+    55 = 0019			SD_TDOVER   equ $19
+    56 = 003F			SD_LBUF     equ $3f
+    57 = 0021			SD_COMFNAM  equ $21
+    58
+    59 = CFFF			AXLON       equ $CFFF
+    60
+    61 = D01F			CONSOL      equ $D01F
+    62
+    63 = D301			PORTB       equ $D301
+    64
+    65 = D400			DMACTL      equ $D400 
+    66 = D40E			NMIEN       equ $D40E
+    67
+    68 = E456			CIOV        equ $E456
+    69 = E474			WARMSV      equ $E474
+    70 = E477			COLDSV      equ $E477
+    71
+    72 = FFEE			REVDAT      equ $ffee
+    73 = FFF1			XLXEOP      equ $fff1
+    74 = FFF2			PATNUM      equ $fff2
+    75 = FFF7			REVNUM      equ $fff7
+    76 = FFF8			CHKSUM      equ $fff8
+     4 				        icl '_FNEQU.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_FNEQU.ICL
+     1 				* CONFIG data length definition
+     2 = 0021			fn_ssid_ln equ 33
+     3 = 0040			fn_pass_ln equ 64
+     4 = 0040			fn_host_ln equ 64
+     5 = 0004			fn_ip_ln   equ 4
+     6 = 0006			fn_mac_ln  equ 6
+     7 = 000F			fn_firm_ln equ 15
+     8 				* file name
+     9 = 0024			fn_fnam_ln equ 36
+    10 				* host slot
+    11 = 0020			fn_hslt_ln equ 32
+    12 = 0100			fn_hslt_l8 equ fn_hslt_ln*8
+    13 				* device slot
+    14 = 0026			fn_devs_ln equ 38
+    15 = 0130			fn_devs_l8 equ fn_devs_ln*8
+    16 				* WiFi Status 
+    17 = 0000			WF_IDLE equ 0 ; WIFI is idle
+    18 = 0001			WF_NOID equ 1 ; No SSID Available
+    19 = 0002			WF_SCMP equ 2 ; Scan Completed
+    20 = 0003			WF_CACT equ 3 ; Connected to network, and active
+    21 = 0004			WF_CFLD equ 4 ; Last connect failed
+    22 = 0005			WF_CLST equ 5 ; WiFi Connection Lost
+    23 = 0006			WF_CDSC equ 6 ; WiFi explicitly disconnected
+     5
+     6 				        blk dos $3000
+     7 FFFF> 3000-31EF> 20 E1 +         jsr _chksdos
+     8 				* clear buffer
+     9 3003 A2 00		        ldx #$00
+    10 3005 8A			        txa
+    11 3006 9D F1 31		clr_buf sta buffer,X
+    12 3009 E8			        inx
+    13 300A D0 FA		        bne clr_buf
+    14 				* parse parameter
+    15 300C 20 05 31		        jsr _lbinit
+    16 300F 20 44 31		        jsr _lbtrim
+    17 				* check for slot number
+    18 3012 C9 31		        cmp #'1'
+    19 3014 90 0C		        bcc badpara
+    20 3016 C9 39		        cmp #'9'
+    21 3018 B0 08		        bcs badpara
+    22 301A A8			        tay
+    23 301B 20 3F 31		        jsr _lbget
+    24 301E C9 9B		        cmp #$9b
+    25 3020 F0 51		        beq sslt
+    26 				* Bad Parameter
+    27 3022 20 2A 30		badpara jsr prnDocu
+    28 3025 A0 9C		        ldy #$9C
+    29 3027 4C 4C 31		        jmp _fail
+    30
+    31 302A 20 AA 30		prnDocu jsr _print
+    32 302D 9B 55 73 61 67 65 +         dta b($9b),c'Usage: FPWD slot',b($9b)
+    33 303F			        icl '_VERSION.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_VERSION.ICL
+     1 303F 56 65 72 73 69 6F +         dta c'Version: 21-03-23',b($9b)
+    34 3051 4C 69 73 74 20 70 +         dta c'List path/prefix for host slot.',b($9b,$00)
+    35 3072 60			        rts
+    36
+    37 				* set slot
+    38 3073 88			sslt    dey
+    39 3074 98			        tya
+    40 3075 29 0F		        and #$0F
+    41 3077 8D A8 30		        sta fpwdslt
+    42 				* get host slot path
+    43 307A A2 9E		do_fcd  ldx <fpwd
+    44 307C A0 30		        ldy >fpwd
+    45 307E 20 D6 31		        jsr _dosio
+    46 				* print host slot path
+    47 3081 20 99 30		        jsr prneol
+    48 3084 A2 00		        ldx #$00
+    49 3086 8E F0 31		        stx iter1
+    50 3089 BD F1 31		nxtchar lda buffer,X
+    51 308C F0 0B		        beq prneol
+    52 308E 20 CE 30		        jsr _putc
+    53 3091 EE F0 31		        inc iter1
+    54 3094 AE F0 31		        ldx iter1
+    55 3097 D0 F0		        bne nxtchar
+    56 				* print EOL
+    57 3099 A9 9B		prneol  lda #$9b
+    58 309B 4C CE 30		        jmp _putc
+    59
+    60 				* DCB data for Fuji GET SLOT PREFIX (PATH)
+    61 309E 70 01		fpwd    dta b($70,$01)  ; FujiNet device and unit
+    62 30A0 E0			        dta b($E0)      ; Command GET SLOT PREFIX
+    63 30A1 40			        dta b($40)      ; status
+    64 30A2 F1 31		        dta a(buffer)   ; path buffer
+    65 30A4 10			        dta b($10)      ; time out
+    66 30A5 00			        dta b($00)      ; unused
+    67 30A6 00 01		        dta a($100)     ; buffer size
+    68 30A8 00			fpwdslt dta b($00)      ; AUX1 slot number
+    69 30A9 00			        dta b($00)      ; AUX2
+    70
+    71 30AA			        icl '_PRINT.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_PRINT.ICL
+     1 				* print string to console
+     2 30AA 68			_print      pla
+     3 30AB 8D BB 30		            sta _print_lda+1
+     4 30AE 68			            pla
+     5 30AF 8D BC 30		            sta _print_lda+2
+     6 30B2 EE BB 30		_print_loop inc _print_lda+1
+     7 30B5 D0 03		            bne _print_lda
+     8 30B7 EE BC 30		            inc _print_lda+2
+     9 30BA AD FF FF		_print_lda  lda $FFFF
+    10 30BD F0 06		            beq _print_lend
+    11 30BF 20 CE 30		            jsr _putc
+    12 30C2 4C B2 30		            jmp _print_loop
+    13 30C5 AD BC 30		_print_lend lda _print_lda+2
+    14 30C8 48			            pha
+    15 30C9 AD BB 30		            lda _print_lda+1
+    16 30CC 48			            pha
+    17 30CD 60			            rts
+    18
+    19 				* put char to console
+    20 30CE A8			_putc       tay
+    21 30CF A9 00		            lda #$00
+    22 30D1 AA			            tax
+    23 30D2 9D 48 03		            sta $340+$08,X
+    24 30D5 9D 49 03		            sta $340+$09,X
+    25 30D8 A9 0B		            lda #$0B
+    26 30DA 9D 42 03		            sta $340+$02,X
+    27 30DD 98			            tya
+    28 30DE 4C 56 E4		            jmp $E456
+    72 30E1			        icl '_CHKSDOS.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_CHKSDOS.ICL
+     1 30E1 AD 00 07		_chksdos    lda SD_SPARTA
+     2 30E4 C9 53		            cmp #'S'
+     3 30E6 F0 1C		            beq _chksdos_e
+     4 30E8 20 AA 30		            jsr _print
+     5 30EB 9B			            dta b($9B)
+     6 30EC 45 72 72 6F 72 3A +             dta c'Error: No SpartaDOS'
+     7 30FF 9B 00		            dta b($9B,$00)
+     8 3101 6C 0A 00		            jmp (DOSVEC)
+     9 3104 60			_chksdos_e  rts
+    73 3105			        icl '_SDLBUF.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_SDLBUF.ICL
+     1 				* iterator for LBUF parsing
+     2 				* register X contains current offset
+     3
+     4 				* init iterartor
+     5 3105 18			_lbinit  clc
+     6 3106 A5 0A		         lda DOSVEC
+     7 3108 69 0A		         adc #SD_BUFOFF
+     8 310A 8D 24 31		         sta _bufoff+1
+     9 310D A5 0B		         lda DOSVEC+1
+    10 310F 69 00		         adc #$00
+    11 3111 8D 25 31		         sta _bufoff+2
+    12 				* get LBUF
+    13 3114 18			         clc
+    14 3115 A5 0A		         lda DOSVEC
+    15 3117 69 3F		         adc #SD_LBUF
+    16 3119 8D 40 31		         sta _lbget+1
+    17 311C A5 0B		         lda DOSVEC+1
+    18 311E 69 00		         adc #$00
+    19 3120 8D 41 31		         sta _lbget+2
+    20 3123 AD FF FF		_bufoff  lda $ffff
+    21 3126 48			         pha
+    22 3127 AA			         tax
+    23 				* check for docu option /?
+    24 3128 20 44 31		         jsr _lbtrim
+    25 312B C9 2F		         cmp #'/'
+    26 312D D0 0D		         bne _lbend
+    27 312F 20 3F 31		         jsr _lbget
+    28 3132 C9 3F		         cmp #'?'
+    29 3134 D0 06		         bne _lbend
+    30 3136 20 2A 30		         jsr prnDocu
+    31 3139 6C 0A 00		         jmp (DOSVEC)
+    32 313C 68			_lbend   pla
+    33 313D AA			         tax
+    34 313E 60			         rts
+    35
+    36 				* get next char from command line
+    37 313F BD FF FF		_lbget   lda $ffff,X
+    38 3142 E8			         inx
+    39 3143 60			         rts
+    40
+    41 				* trim spaces and get
+    42 3144 20 3F 31		_lbtrim  jsr _lbget
+    43 3147 C9 20		         cmp #' '
+    44 3149 F0 F9		         beq *-5
+    45 314B 60			         rts
+    46
+    74 314C			        icl '_SDFAIL.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_SDFAIL.ICL
+     1 				* print error
+     2 314C 98			_fail       tya
+     3 314D 48			            pha
+     4 314E 20 AA 30		            jsr _print
+     5 3151 9B			            dta b($9B)
+     6 3152 45 72 72 6F 72 20	            dta c'Error '
+     7 3158 00			            dta b($00)
+     8 				* output error number in decimal
+     9 3159 68			            pla
+    10 315A 20 7E 31		            jsr _putdec
+    11 315D A9 9B		            lda #$9B
+    12 315F 20 CE 30		            jsr _putc
+    13 				* check it is not SDX
+    14 3162 AD 01 07		            lda SD_SVERS
+    15 3165 C9 40		            cmp #$40
+    16 3167 B0 12		            bcs _dosvec
+    17 				* stop batch for SpartaDOS 3
+    18 3169 A0 08		            ldy #SD_XDIVIO
+    19 316B B1 0A		            lda (DOSVEC),Y
+    20 316D 8D 79 31		            sta _fxdivio+1
+    21 3170 C8			            iny
+    22 3171 B1 0A		            lda (DOSVEC),Y
+    23 3173 8D 7A 31		            sta _fxdivio+2
+    24 3176 A0 01		            ldy #$01
+    25 3178 20 77 E4		_fxdivio    jsr COLDSV
+    26 				* back home
+    27 317B 6C 0A 00		_dosvec     jmp (DOSVEC)
+    28
+    29 317E A2 00		_putdec     ldx #$00
+    30 3180 8E B5 31		            stx _chkprez
+    31 3183 A2 02		            ldx #$02
+    32 3185 A0 00		_dec_loop   ldy #$00
+    33 3187 DD B6 31		_sbc_loop   cmp _decimal,X
+    34 318A 90 06		            bcc _next_dec
+    35 318C FD B6 31		            sbc _decimal,X
+    36 318F C8			            iny
+    37 3190 D0 F5		            bne _sbc_loop
+    38 3192 48			_next_dec   pha
+    39 3193 8A			            txa
+    40 3194 48			            pha
+    41 3195 98			            tya
+    42 				* no leading zeros
+    43 3196 0D B5 31		            ora _chkprez
+    44 3199 8D B5 31		            sta _chkprez
+    45 319C F0 06		            beq *+8
+    46 319E 98			            tya
+    47 319F 09 30		            ora #$30
+    48 31A1 20 CE 30		            jsr _putc
+    49 31A4 68			            pla
+    50 31A5 AA			            tax
+    51 31A6 68			            pla
+    52 31A7 CA			            dex
+    53 31A8 10 DB		            bpl _dec_loop
+    54 31AA AD B5 31		            lda _chkprez
+    55 				* write 0 if all digit are zero
+    56 31AD D0 05		            bne *+7
+    57 31AF A9 30		            lda #'0'
+    58 31B1 20 CE 30		            jsr _putc
+    59 31B4 60			            rts
+    60
+    61 				* array with decimals
+    62 31B5 00			_chkprez    dta b($00)
+    63 31B6 01 0A 64		_decimal    dta b(1,10,100)
+    75 31B9			        icl '_SDLSIO.ICL'
+Source: /Users/holgerjanz/Documents/ATARI-XL/Projects/FujiNetToolsSpartaDOS/SRC/_SDLSIO.ICL
+     1 				* call local SD SIO
+     2 31B9 00			_lsioset    dta b($00)
+     3 31BA AD B9 31		SD_SIO      lda _lsioset
+     4 31BD D0 14		            bne _jsr_lsio
+     5 31BF A5 0A		            lda DOSVEC
+     6 31C1 38			            sec
+     7 31C2 E9 0A		            sbc #SD_LSIO
+     8 31C4 8D D4 31		            sta _jsr_lsio+1
+     9 31C7 A5 0B		            lda DOSVEC+1
+    10 31C9 E9 00		            sbc #$00
+    11 31CB 8D D5 31		            sta _jsr_lsio+2
+    12 31CE A9 FF		            lda #$ff
+    13 31D0 8D B9 31		            sta _lsioset
+    14 31D3 6C FF FF		_jsr_lsio   jmp ($ffff)
+    15
+    16 				* set DCB and call SIO
+    17 31D6 8E DF 31		_dosio      stx _nxtsiod+1
+    18 31D9 8C E0 31		            sty _nxtsiod+2
+    19 31DC A2 0B		            ldx #$0b
+    20 31DE BD FF FF		_nxtsiod    lda $FFFF,X
+    21 31E1 9D 00 03		            sta DDEVIC,X
+    22 31E4 CA			            dex
+    23 31E5 10 F7		            bpl _nxtsiod
+    24 31E7 20 BA 31		            jsr SD_SIO
+    25 31EA 10 03		            bpl *+5
+    26 31EC 4C 4C 31		            jmp _fail
+    27 31EF 60			            rts
+    76
+    77 = 31F0			iter1   equ *
+    78 				* device slots buffer
+    79 = 31F1			buffer  equ iter1+1
+    80
+    81 				        end

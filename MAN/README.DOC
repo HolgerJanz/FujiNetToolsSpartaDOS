@@ -1,15 +1,11 @@
 These are FujiNet Tools for all
-SpartaDOS 3 and SpartaDOS X compatible
-DOS versions.
+SpartaDOS 3 and SpartaDOS X
+compatible DOS versions.
 
 These are command line tools and the
 used DOS must support case sensitive
 command line interface.
 
-The current version of the tools is:
-06-03-23 ($06,$03,$17)
+Use option /? for short description.
 
-The version of every tool can be found
-at byte offset 9. To get the version
-of a tools use the command DUMP e.g:
-  DUMP <tool>.COM 9 3
+The current version is: 21-03-23

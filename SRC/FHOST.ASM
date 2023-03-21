@@ -4,14 +4,10 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
 *  parse parameter
         jsr _lbinit
         jsr _lbtrim
-        cmp #$9b
-        bne *+5
-        jmp prnhlp
 *  check for slot number
         cmp #'1'
         bcc badpara
@@ -56,11 +52,14 @@ truncr  ldy #$89
         jmp _fail
 
 * parameter error
-badpara jsr prnhlp
+badpara jsr prnDocu
         ldy #$9C ; Bad Parameter
         jmp _fail
-prnhlp  jsr _print
-        dta b($9b),c'Usage: FHOST slot [address]',b($9b,$00)
+
+prnDocu jsr _print
+        dta b($9b),c'Usage: FHOST slot [address]',b($9b)
+        icl '_VERSION.ICL'
+        dta b($9b),c'Sets host slot to address.',b($9b,$00)
         rts
 
 * get number ATASCII 1..8 => HEX 0..7

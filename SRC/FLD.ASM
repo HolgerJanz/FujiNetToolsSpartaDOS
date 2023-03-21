@@ -4,8 +4,8 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
+        jsr _lbinit
 * read config via SIO
         ldx <siorslt
         ldy >siorslt
@@ -72,6 +72,12 @@ prneol  lda #$9b
         bcc nxtslt
         rts
 
+prnDocu jsr _print
+        dta b($9b),c'Usage: FLD',b($9b)
+        icl '_VERSION.ICL'
+        dta b($9b),c'Lists all device slots.',b($9b,$00)
+        rts
+
 * DCB data for Fuji
 siorslt dta b($70,$01)  ; FujiNet device and unit
         dta b($F2)      ; Command READ DEVICE SLOTS
@@ -96,6 +102,7 @@ fgnmslt dta b($00)      ; slot number
 
         icl '_PRINT.ICL'
         icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
         icl '_SDFAIL.ICL'
         icl '_SDLSIO.ICL'
 

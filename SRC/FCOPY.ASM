@@ -5,7 +5,6 @@
 
 * main
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear copy buffer
         ldx #$00
@@ -16,9 +15,7 @@
 * parse comand line
         jsr _lbinit
         jsr _lbtrim
-        cmp #$9b
-        beq prnhlp
-* parse source slot# and file
+* parse source slot and file
         cmp #'1'
         bcc badpara
         cmp #'9'
@@ -39,7 +36,7 @@ nxtidc  cmp #' '
         jsr _lbget
         iny
         jmp nxtidc
-* parse passwd
+* parse destination slot and file
 pardst  lda #'|'
         sta cpybuf,Y
         iny
@@ -71,12 +68,8 @@ nxtpwc  cmp #' '
         jmp nxtpwc
 
 * error bad parameter
-badpara jsr prnhlp
-        ldy #$9C ; Bad Parameter
+badpara ldy #$9C ; Bad Parameter
         jmp _fail
-prnhlp  jsr _print
-        dta b($9b),c'Usage: FCOPY sslot sfile dslot dfile',b($9b,$00)
-        rts
 
 * call sio
 callsio jsr _print
@@ -84,6 +77,16 @@ callsio jsr _print
         ldx <siocopy
         ldy >siocopy
         jsr _dosio
+        rts
+
+* print docu, used by _blinit
+prnDocu jsr _print
+        dta b($9b)
+        dta c'Usage: FCOPY sslot sfile dslot [dfile]',b($9b)
+        icl '_VERSION.ICL'
+        dta c'Copies one file sfile from host slot',b($9b)
+        dta c'sslot to file dfile of host slot dslot.',b($9b)
+        dta b($00)
         rts
 
 * DCB data for Fuji COPY FILE

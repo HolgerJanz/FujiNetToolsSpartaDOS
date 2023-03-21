@@ -4,8 +4,8 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
+        jsr _lbinit
 * read host slots
         ldx <siodata
         ldy >siodata
@@ -31,6 +31,12 @@ slt_lp  lda slt_num
         adc #fn_hslt_ln
         sta iter2
         bne slt_lp
+        rts
+
+prnDocu jsr _print
+        dta b($9b),c'Usage: FLH',b($9b)
+        icl '_VERSION.ICL'
+        dta b($9b),c'Lists all host slots.',b($9b,$00)
         rts
 
 * print characters
@@ -64,6 +70,7 @@ siodata dta b($70,$01)  ; FujiNet device and unit
 
         icl '_PRINT.ICL'
         icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
         icl '_SDFAIL.ICL'
         icl '_SDLSIO.ICL'
 

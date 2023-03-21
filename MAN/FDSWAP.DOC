@@ -2,4 +2,11 @@
   FDSWAP Dx: Dy:
 
 Swaps the configuration of two device
-slots Dx: and Dy:.
+slots Dx: and Dy:. If a device slot
+is not mounted then the command checks.
+If another device is found then the
+command is canceled.
+
+As with firmware version 0.5.daf2015f
+2023-01-25 an unmounted drive will
+not get offline.

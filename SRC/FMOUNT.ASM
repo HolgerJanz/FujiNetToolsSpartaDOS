@@ -5,7 +5,6 @@
 
 * main
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear device slot to be set
         ldx #fn_devs_ln-1
@@ -16,9 +15,6 @@
 *  parse parameter
         jsr _lbinit
         jsr _lbtrim
-        cmp #$9b
-        bne *+5
-        jmp prnhlp
 *  check D#:
         cmp #'D'
         beq getdnum
@@ -71,11 +67,14 @@ fnamlp  cmp #$9b
         jsr _lbget
         jmp fnamlp
 * error bad parameter
-badpara jsr prnhlp
+badpara jsr prnDocu
         ldy #$9C ; Bad Parameter
         jmp _fail
-prnhlp  jsr _print
-        dta b($9b),c'Usage: FMOUNT Dx: [slot R|W file]',b($9b,$00)
+
+prnDocu jsr _print
+        dta b($9b),c'Usage: FMOUNT Dx: [slot R|W file]',b($9b)
+        icl '_VERSION.ICL'
+        dta b($9b),c'Mount file of host slot to device slot.',b($9b,$00)
         rts
 
 * mount disk slot

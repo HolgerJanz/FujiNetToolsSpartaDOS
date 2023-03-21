@@ -1,5 +1,11 @@
 
   FCONFIG
 
-Prints network configuration, and
+Lists the network configuration, and
 firmware version of FujiNet.
+
+At least version 0.5.7eb55adb
+2022-10-12 22:13:00 of the FujiNet
+firmware is required because the
+format of the configuration block
+has changed.

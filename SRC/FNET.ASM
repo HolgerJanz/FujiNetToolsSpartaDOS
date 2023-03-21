@@ -5,7 +5,6 @@
 
 * main
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear SSID/passwd buffer
         ldx #fn_ssid_ln+fn_pass_ln-1
@@ -16,8 +15,6 @@
 * parse comand line
         jsr _lbinit
         jsr _lbtrim
-        cmp #$9b
-        beq prnhlp
 * parse ssid
         cmp #'"'
         bne *+8
@@ -57,12 +54,9 @@ nxtpwc  cmp #' '
         jmp nxtpwc
 
 * error bad parameter
-badpara jsr prnhlp
+badpara jsr prnDocu
         ldy #$9C ; Bad Parameter
         jmp _fail
-prnhlp  jsr _print
-        dta b($9b),c'Usage: FNET ssid [passwd]',b($9b,$00)
-        rts
 
 * call sio
 callsio jsr _print
@@ -94,6 +88,13 @@ callsio jsr _print
         rts
 wifiok  jsr _print
         dta c'ok',b($9b,$00)
+        rts
+
+prnDocu jsr _print
+        dta b($9b),c'Usage: FNET ssid [passwd]',b($9b)
+        icl '_VERSION.ICL'
+        dta c'Configure WiFi. Use "" if ssid or',b($9b)
+        dta c'passwd contain spaces.',b($9b,$00)
         rts
 
 * DCB data for Fuji SET SSID AND CONNECT

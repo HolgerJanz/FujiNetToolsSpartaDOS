@@ -4,7 +4,6 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
 * clear buffer
         ldx #$00
@@ -15,8 +14,6 @@ clr_buf sta buffer,X
 * parse parameter
         jsr _lbinit
         jsr _lbtrim
-        cmp #$9b
-        beq prnuse
 * check for slot number
         cmp #'1'
         bcc badpara
@@ -31,11 +28,14 @@ clr_buf sta buffer,X
         dex
         jmp sslt
 * Bad Parameter
-badpara jsr prnuse
+badpara jsr prnDocu
         ldy #$9C
         jmp _fail
-prnuse  jsr _print
-        dta b($9b),c'Usage: FLS slot [path[/pattern]]',b($9b,$00)
+
+prnDocu jsr _print
+        dta b($9b),c'Usage: FLS slot [path[/pattern]]',b($9b)
+        icl '_VERSION.ICL'
+        dta b($9b),c'List directory of host slot.',b($9b,$00)
         rts
 
 * set slot

@@ -4,8 +4,8 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
+        jsr _lbinit
 * read config via SIO
         ldx <siorst
         ldy >siorst
@@ -15,6 +15,12 @@
         dex
         cpx RTCLOK+2
         bne *-2
+        rts
+
+prnDocu jsr _print
+        dta b($9b),c'Usage: RESET',b($9b)
+        icl '_VERSION.ICL'
+        dta c'Resets FujiNet and waits ca. 3s.',b($9b,$00)
         rts
 
 * DCB data for Fuji reset
@@ -30,6 +36,7 @@ siorst  dta b($70,$01)  ; FujiNet device and unit
 
         icl '_PRINT.ICL'
         icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
         icl '_SDFAIL.ICL'
         icl '_SDLSIO.ICL'
 

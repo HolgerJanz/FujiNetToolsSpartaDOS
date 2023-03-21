@@ -17,7 +17,20 @@ _lbinit  clc
          lda DOSVEC+1
          adc #$00
          sta _lbget+2
-_bufoff  ldx $ffff
+_bufoff  lda $ffff
+         pha
+         tax
+* check for docu option /?
+         jsr _lbtrim
+         cmp #'/'
+         bne _lbend
+         jsr _lbget
+         cmp #'?'
+         bne _lbend
+         jsr prnDocu
+         jmp (DOSVEC)
+_lbend   pla
+         tax
          rts
 
 * get next char from command line

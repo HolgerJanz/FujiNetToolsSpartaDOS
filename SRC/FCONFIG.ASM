@@ -4,8 +4,9 @@
         icl '_FNEQU.ICL'
 
         blk dos $3000
-        icl '_VERSDATE.ICL'
         jsr _chksdos
+* check for docu option
+        jsr _lbinit
 * read config via SIO
         ldx <siocfg
         ldy >siocfg
@@ -71,6 +72,16 @@
         lda #fn_firm_ln
         jsr prnchar
 
+        rts
+
+* print docu, used by _blinit
+prnDocu jsr _print
+        dta b($9b)
+        dta c'Usage: FCONFIG',b($9b)
+        icl '_VERSION.ICL'
+        dta c'Lists WiFi configuration and version',b($9b)
+        dta c'of FujiNet.',b($9b)
+        dta b($00)
         rts
 
 * DCB data for Fuji get adapter config
@@ -144,6 +155,7 @@ nxtmacp lda $ffff,X
 
         icl '_PRINT.ICL'
         icl '_CHKSDOS.ICL'
+        icl '_SDLBUF.ICL'
         icl '_SDFAIL.ICL'
         icl '_SDLSIO.ICL'
         icl '_CONVH2A.ICL'
