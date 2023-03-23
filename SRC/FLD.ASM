@@ -74,7 +74,7 @@ prneol  lda #$9b
 
 prnDocu jsr _print
         dta b($9b),c'Usage: FLD',b($9b)
-        icl '_VERSION.ICL'
+        dta c'Version: 21-03-23',b($9b)
         dta b($9b),c'Lists all device slots.',b($9b,$00)
         rts
 

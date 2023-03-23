@@ -34,7 +34,7 @@ badpara jsr prnDocu
 
 prnDocu jsr _print
         dta b($9b),c'Usage: FLS slot [path[/pattern]]',b($9b)
-        icl '_VERSION.ICL'
+        dta c'Version: 21-03-23',b($9b)
         dta b($9b),c'List directory of host slot.',b($9b,$00)
         rts
 

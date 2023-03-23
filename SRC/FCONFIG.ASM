@@ -78,7 +78,7 @@
 prnDocu jsr _print
         dta b($9b)
         dta c'Usage: FCONFIG',b($9b)
-        icl '_VERSION.ICL'
+        dta c'Version: 21-03-23',b($9b)
         dta c'Lists WiFi configuration and version',b($9b)
         dta c'of FujiNet.',b($9b)
         dta b($00)

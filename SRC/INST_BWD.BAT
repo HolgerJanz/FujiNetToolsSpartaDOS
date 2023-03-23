@@ -1,0 +1,4 @@
+; Installs FujiNet Tools for BW-DOS
+D1:COPY F*.COM D1:>DOS>
+D1:COPY F*.DOC D1:>DOS>*
+D1:COPY README.DOC D1:>DOS>FUJINET

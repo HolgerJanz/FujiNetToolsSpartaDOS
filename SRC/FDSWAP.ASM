@@ -434,7 +434,7 @@ hmntslt dta b($00)      ; AUX1
 prnDocu jsr _print
         dta b($9b)
         dta c'Usage: FDSWAP Dx: Dy:',b($9b)
-        icl '_VERSION.ICL'
+        dta c'Version: 21-03-23',b($9b)
         dta c'Swaps any two device slots on FujiNet.',b($9b)
         dta c'Checks for other existing drives.',b($9b)
         dta b($00)

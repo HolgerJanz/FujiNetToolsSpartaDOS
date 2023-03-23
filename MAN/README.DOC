@@ -1,3 +1,4 @@
+
 These are FujiNet Tools for all
 SpartaDOS 3 and SpartaDOS X
 compatible DOS versions.
@@ -7,5 +8,10 @@ used DOS must support case sensitive
 command line interface.
 
 Use option /? for short description.
-
 The current version is: 21-03-23
+
+FujiNet Commands:
+  FCD     FCONFIG  FCOPY    FDSWAP
+  FHOST   FLD      FLH      FLS
+  FMOUNT  FNET     FPWD     FRESET
+  FSCAN

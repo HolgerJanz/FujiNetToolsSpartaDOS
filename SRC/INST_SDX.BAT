@@ -1,0 +1,4 @@
+; Installs FujiNet Tools for SpartaDOS X
+COPY F*.COM D1:>BIN>
+COPY F*.DOC D1:>MAN>*.MAN
+COPY README.DOC D1:>MAN>FUJINET.MAN
