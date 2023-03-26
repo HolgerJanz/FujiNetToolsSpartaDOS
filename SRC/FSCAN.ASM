@@ -71,7 +71,7 @@ prneol  lda #$9b
 prnDocu jsr _print
         dta b($9b),c'Usage: FSCAN',b($9b)
         dta c'Version: 21-03-23',b($9b)
-        dta c'Scans for networks and list result.',b($9b,$00)
+        dta c'Scans for networks and lists result.',b($9b,$00)
         rts
 
 * DCB data for Fuji SCAN
