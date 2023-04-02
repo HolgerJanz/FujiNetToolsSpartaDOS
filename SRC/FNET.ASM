@@ -15,6 +15,9 @@
 * parse comand line
         jsr _lbinit
         jsr _lbtrim
+        cmp #$9b
+        bne *+5
+        jmp prnDocu
 * parse ssid
         cmp #'"'
         bne *+8
@@ -92,7 +95,7 @@ wifiok  jsr _print
 
 prnDocu jsr _print
         dta b($9b),c'Usage: FNET ssid [passwd]',b($9b)
-        dta c'Version: 21-03-23',b($9b)
+        dta c'Version: 02-04-23',b($9b)
         dta c'Configure WiFi. Use "" if ssid or',b($9b)
         dta c'passwd contain spaces.',b($9b,$00)
         rts

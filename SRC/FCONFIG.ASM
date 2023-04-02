@@ -63,9 +63,6 @@
         jsr prnmac
 
         jsr _print
-        dta c'FCONFIG Version: 1.1 06-03-2023',b($9b,$00)
-
-        jsr _print
         dta c'  Fuji Firmware: ',b($00)
         ldx <fc_firm
         ldy >fc_firm
@@ -78,7 +75,7 @@
 prnDocu jsr _print
         dta b($9b)
         dta c'Usage: FCONFIG',b($9b)
-        dta c'Version: 21-03-23',b($9b)
+        dta c'Version: 02-04-23',b($9b)
         dta c'Lists WiFi configuration and version',b($9b)
         dta c'of FujiNet.',b($9b)
         dta b($00)

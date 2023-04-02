@@ -14,7 +14,7 @@ clr_buf sta buffer,X
         jsr _lbinit
         jsr _lbtrim
         cmp #$9b
-        beq badpara
+        beq prnDocu
 * check for slot number
         cmp #'1'
         bcc badpara
@@ -48,7 +48,7 @@ badpara ldy #$9C ; Bad Parameter
 prnDocu jsr _print
         dta b($9b)
         dta c'Usage: FCD slot [path]',b($9b)
-        dta c'Version: 21-03-23',b($9b)
+        dta c'Version: 02-04-23',b($9b)
         dta c'Sets prefix of host slot to path.',b($9b)
         dta b($00)
         rts

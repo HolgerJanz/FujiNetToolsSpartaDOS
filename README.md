@@ -7,7 +7,7 @@ These tools are based on the SIO commands implemented by FujiNet. Current issues
 
 Use option /? for short description.
 
-The current version of the tools is: 21-03-23
+The current version of the tools is: 02-04-23
 
 
 holgerjanz@abbuc.social

@@ -15,6 +15,9 @@
 *  parse parameter
         jsr _lbinit
         jsr _lbtrim
+        cmp #$9b
+        bne *+5
+        jmp prnDocu
 *  check D#:
         cmp #'D'
         beq getdnum
@@ -73,7 +76,7 @@ badpara jsr prnDocu
 
 prnDocu jsr _print
         dta b($9b),c'Usage: FMOUNT Dx: [slot R|W file]',b($9b)
-        dta c'Version: 21-03-23',b($9b)
+        dta c'Version: 02-04-23',b($9b)
         dta b($9b),c'Mount file of host slot to device slot.',b($9b,$00)
         rts
 

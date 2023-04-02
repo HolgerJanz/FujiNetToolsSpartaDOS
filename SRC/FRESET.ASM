@@ -19,7 +19,7 @@
 
 prnDocu jsr _print
         dta b($9b),c'Usage: RESET',b($9b)
-        dta c'Version: 21-03-23',b($9b)
+        dta c'Version: 02-04-23',b($9b)
         dta c'Resets FujiNet and waits ca. 3s.',b($9b,$00)
         rts
 

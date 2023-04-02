@@ -15,6 +15,9 @@
 * parse comand line
         jsr _lbinit
         jsr _lbtrim
+        cmp #$9b
+        bne *+5
+        jmp prnDocu
 * parse source slot and file
         cmp #'1'
         bcc badpara
@@ -83,7 +86,7 @@ callsio jsr _print
 prnDocu jsr _print
         dta b($9b)
         dta c'Usage: FCOPY sslot sfile dslot [dfile]',b($9b)
-        dta c'Version: 21-03-23',b($9b)
+        dta c'Version: 02-04-23',b($9b)
         dta c'Copies one file sfile from host slot',b($9b)
         dta c'sslot to file dfile of host slot dslot.',b($9b)
         dta b($00)

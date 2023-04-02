@@ -14,6 +14,9 @@ clr_buf sta buffer,X
 * parse parameter
         jsr _lbinit
         jsr _lbtrim
+        cmp #$9b
+        bne *+5
+        jmp prnDocu
 * check for slot number
         cmp #'1'
         bcc badpara
@@ -34,7 +37,7 @@ badpara jsr prnDocu
 
 prnDocu jsr _print
         dta b($9b),c'Usage: FLS slot [path[/pattern]]',b($9b)
-        dta c'Version: 21-03-23',b($9b)
+        dta c'Version: 02-04-23',b($9b)
         dta b($9b),c'List directory of host slot.',b($9b,$00)
         rts
 
