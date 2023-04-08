@@ -1,4 +1,4 @@
-* FujiNet FRESET reset FujiNet
+* FujiNet FMOUNTAL mount all host and device slots
 
         icl '_SYSEQU.ICL'
         icl '_FNEQU.ICL'
@@ -7,25 +7,20 @@
         jsr _chksdos
         jsr _lbinit
 * read config via SIO
-        ldx <siorst
-        ldy >siorst
+        ldx <siomnta
+        ldy >siomnta
         jsr _dosio
-* wait 4-5 sec
-        ldx RTCLOK+2
-        dex
-        cpx RTCLOK+2
-        bne *-2
         rts
 
 prnDocu jsr _print
-        dta b($9b),c'Usage: FRESET',b($9b)
-        dta c'Version: 02-04-23',b($9b)
-        dta c'Resets FujiNet and waits ca. 3s.',b($9b,$00)
+        dta b($9b),c'Usage: FMOUNTAL',b($9b)
+        dta c'Version: 08-04-23',b($9b)
+        dta c'Mounts all host and device slots.',b($9b,$00)
         rts
 
-* DCB data for Fuji reset
-siorst  dta b($70,$01)  ; FujiNet device and unit
-        dta b($FF)      ; Command RESET
+* DCB data for Fuji mount all
+siomnta dta b($70,$01)  ; FujiNet device and unit
+        dta b($D7)      ; Command MOUNT ALL
         dta b($00)      ; status
         dta a($0000)    ; address unused
         dta b($10)      ; time out

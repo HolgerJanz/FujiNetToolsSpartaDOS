@@ -5,9 +5,7 @@ This repository provides native [FujiNet](https://fujinet.online) tools for all 
 
 These tools are based on the SIO commands implemented by FujiNet. Current issues and limitations can be found in the official [tools](https://github.com/FujiNetWIFI/fujinet-config-tools/issues) and [firmware](https://github.com/FujiNetWIFI/fujinet-platformio/issues) repositories.
 
-Use option /? for short description.
-
-The current version of the tools is: 02-04-23
+Use option /? for short description e.g., FCONFIF /?.
 
 
 holgerjanz@abbuc.social

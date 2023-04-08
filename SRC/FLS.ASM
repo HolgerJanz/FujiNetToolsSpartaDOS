@@ -37,7 +37,7 @@ badpara jsr prnDocu
 
 prnDocu jsr _print
         dta b($9b),c'Usage: FLS slot [path[/pattern]]',b($9b)
-        dta c'Version: 02-04-23',b($9b)
+        dta c'Version: 08-04-23',b($9b)
         dta b($9b),c'List directory of host slot.',b($9b,$00)
         rts
 
@@ -59,12 +59,16 @@ nxtlbuf jsr _lbget
         jmp nxtlbuf
 * set null for pattern
 spatt   dey
-        bmi mount
+        bmi noslash
         lda buffer,Y
         cmp #'/'
         bne spatt
 setnul  lda #$00
         sta buffer,Y
+        beq mount
+* if no slash then dec buffer
+* to get starting 0
+noslash dec opendbu
 * mount host slot
 mount   ldx <mounts
         ldy >mounts
@@ -123,7 +127,7 @@ mntslt  dta b($00)      ; AUX1 slot number
 opendir dta b($70,$01)  ; FujiNet device and unit
         dta b($F7)      ; Command OPEN DIRECTORY
         dta b($80)      ; status
-        dta a(buffer)   ; device slots buffer
+opendbu dta a(buffer)   ; device slots buffer
         dta b($10)      ; time out
         dta b($00)      ; unused
         dta a($100)     ; buffer size
@@ -158,8 +162,11 @@ closslt dta b($00)      ; AUX1 slot number
         icl '_SDFAIL.ICL'
         icl '_SDLSIO.ICL'
 
-iter1   equ *
 * device slots buffer
-buffer  equ iter1+1
+        dta b($00)
+* buffer is dec by 1 if no slash
+* must not start at page begin 
+buffer  equ *
+iter1   equ buffer+$100
 
         end

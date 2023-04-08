@@ -9,11 +9,17 @@ The host slot is specified by numbers
 from 1 to 8.
 
 The file is mounted from the host slot
-in read (R) or write mode (W).
+in read (R/r) or write mode (W/w).
 
 The current working directory of the
 host slot is used to find the file
 (see FCD).
+NOTE: The current working directories
+are not saved by FujiNet. At power on
+all current working directories are
+cleared and mounting slots depending
+on current working directories will
+fail.
 
 A device slot is umounted if no file
 and no options are specified e.g.,

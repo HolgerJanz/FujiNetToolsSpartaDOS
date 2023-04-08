@@ -1,0 +1,8 @@
+
+  FMOUNTAL
+
+Causes the FujiNet to mount all device
+and host slots. This is a single
+command equivalent to iterating
+through each device slot and mounting
+it and the corresponding host.
