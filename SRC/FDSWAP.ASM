@@ -1,8 +1,9 @@
 * FujiNet FDSWAP Swap Drives
 * 2023-02-01, ep
 * 2023-03-06, hj
+* 2023-04-30, ep (disable some debug messages, see *;;)
 * based on a lot of works by Holger Janz
-* v0004
+* v0005
 
         icl '_SYSEQU.ICL'
         icl '_FNEQU.ICL'
@@ -62,8 +63,8 @@ p3      lda srcdrvid         ; src must not equal dst
         and #$0F
         sta dstdrvnr
 
-        jsr _print
-        dta b($9b),c'read device slots',b($9b,$00)
+*;;        jsr _print
+*;;        dta b($9b),c'read device slots',b($9b,$00)
         ldx <siorslt         ; FN CMD F2: read device slots
         ldy >siorslt
         jsr _dosio
@@ -96,8 +97,6 @@ p3      lda srcdrvid         ; src must not equal dst
         sta siorsta+1
         jsr dosio_v          ; SIO CMD $53 call without exit on error
         sta srcdrvst         ; will be set to success or timeout
-        bmi p41
-        jsr extsrc           ; external online drive found (e.g. real 1050)
         jmp p41
 
 p4      jsr fnsrc
@@ -116,17 +115,17 @@ P41     ldy #$01             ; same checks for destination
         sta siorsta+1
         jsr dosio_v
         sta dstdrvst
-        bmi p51
-        jsr extdst
         jmp p51
 
 p5      jsr fndst
 p51     lda srcdrvst         ; exit if external src or dst is online
         bmi p52
+        jsr extsrc           ; external online drive found (e.g. real 1050)
         jmp exit
 
 p52     lda dstdrvst
         bmi p53
+        jsr extdst
         jmp exit
 
 p53     lda srcdrvhs
@@ -140,7 +139,7 @@ p53     lda srcdrvhs
         sta fname
         lda >src_fn
         sta fname+1
-        jsr prnsrc
+*;;        jsr prnsrc
         jsr getfnam
 
 p54     lda dstdrvhs
@@ -154,7 +153,7 @@ p54     lda dstdrvhs
         sta fname
         lda >dst_fn
         sta fname+1
-        jsr prndst
+*;;        jsr prndst
         jsr getfnam
 
 p55     ldy #37              ; swap contents in $F2 table
@@ -178,7 +177,7 @@ s1      lda (srcptr),y
         dex
         stx unmntsl
         jsr umtdslt
-;        jsr wrtdsls
+        jsr wrtdsls
         jmp x2
 
 x1      lda srcdrvhs         ; F9 mount host slot
@@ -199,7 +198,7 @@ x1      lda srcdrvhs         ; F9 mount host slot
         sta fnamew
         lda >src_fn
         sta fnamew+1
-        jsr prndst
+*;;        jsr prndst
         jsr setfnam
 
         ldx dstdrvnr         ; F8 mount device slot
@@ -207,7 +206,7 @@ x1      lda srcdrvhs         ; F9 mount host slot
         stx dmntslt
         lda srcdrvrw
         sta dmntmod
-        jsr prndst
+*;;        jsr prndst
         jsr mntdslt
 
 * MOVE DST (?) TO SRC (?)
@@ -240,7 +239,7 @@ x3      lda dstdrvhs         ; F9 mount host slot
         sta fnamew
         lda >dst_fn
         sta fnamew+1
-        jsr prnsrc
+*;;        jsr prnsrc
         jsr setfnam
 
         ldx srcdrvnr         ; F8 mount device slot
@@ -248,7 +247,7 @@ x3      lda dstdrvhs         ; F9 mount host slot
         stx dmntslt
         lda dstdrvrw
         sta dmntmod
-        jsr prnsrc
+*;;        jsr prnsrc
         jsr mntdslt
 
 exit    rts                  ; PROGRAM NORMAL EXIT
@@ -303,33 +302,37 @@ dosio_a lda $FFFF,X
         rts
 
 prnsrc  jsr _print
-        dta c'source',b($00)
+        dta c'Source',b($00)
         rts
 
 prndst  jsr _print
-        dta c'destination',b($00)
+        dta c'Destination',b($00)
         rts
 
-wrtdsls jsr _print
-        dta c'write device slots',b($9b,$00)
+wrtdsls equ *
+*;;     jsr _print
+*;;     dta c'write device slots',b($9b,$00)
         ldx <siowdev         ; F1 write device slot
         ldy >siowdev
         jmp _dosio
 
-getfnam jsr _print
-        dta c' get file name',b($9b,$00)
+getfnam equ *
+*;;     jsr _print
+*;;     dta c' get file name',b($9b,$00)
         ldx <siogfnm
         ldy >siogfnm
         jmp _dosio
 
-setfnam jsr _print
-        dta c' set file name',b($9b,$00)
+setfnam equ *
+*;;     jsr _print
+*;;     dta c' set file name',b($9b,$00)
         ldx <siosfnm
         ldy >siosfnm
         jmp _dosio
 
-mnthslt jsr _print
-        dta c' mount host slot',b($9b,$00)
+mnthslt equ *
+*;;     jsr _print
+*;;     dta c' mount host slot',b($9b,$00)
         ldx <siohmnt
         ldy >siohmnt
         jmp _dosio
@@ -437,7 +440,7 @@ hmntslt dta b($00)      ; AUX1
 prnDocu jsr _print
         dta b($9b)
         dta c'Usage: FDSWAP Dx: Dy:',b($9b)
-        dta c'Version: 02-04-23',b($9b)
+        dta c'Version: 30-04-2023',b($9b)
         dta c'Swaps any two device slots on FujiNet.',b($9b)
         dta c'Checks for other existing drives.',b($9b)
         dta b($00)
@@ -452,27 +455,27 @@ srceqdst jsr _print
         rts
 
 nofnsrc jsr _print
-        dta c'source is unmounted',b($9B,$00)
+        dta c'FN source is empty',b($9B,$00)
         rts
 
 fnsrc   jsr _print
-        dta c'source is mounted',b($9B,$00)
+        dta c'FN source is mounted',b($9B,$00)
         rts
 
 nofndst jsr _print
-        dta c'destination is unmounted',b($9B,$00)
+        dta c'FN destination is empty',b($9B,$00)
         rts
 
 fndst   jsr _print
-        dta c'destination is mounted',b($9B,$00)
+        dta c'FN destination is mounted',b($9B,$00)
         rts
 
 extsrc  jsr _print
-        dta c'external source drive online',b($9B,$00)
+        dta c'External source drive online',b($9B,$00)
         rts
 
 extdst  jsr _print
-        dta c'external destination drive online',b($9B,$00)
+        dta c'External destination drive online',b($9B,$00)
         rts
 
         icl '_PRINT.ICL'

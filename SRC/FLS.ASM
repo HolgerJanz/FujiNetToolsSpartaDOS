@@ -167,6 +167,9 @@ closslt dta b($00)      ; AUX1 slot number
 * buffer is dec by 1 if no slash
 * must not start at page begin 
 buffer  equ *
+* div by 0 if page begin
+assert  equ 1/[buffer&$FF]
+
 iter1   equ buffer+$100
 
         end
